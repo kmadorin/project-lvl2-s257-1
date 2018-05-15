@@ -1,0 +1,13 @@
+---
+
+language: node_js
+node_js:
+  - node
+
+script:
+  - make lint
+  # - make test
+
+os: "linux"
+group: "stable"
+dist: "trusty"
