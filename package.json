@@ -26,8 +26,7 @@
   },
   "homepage": "https://github.com/DmitryPavlenko/project-lvl2-s257#readme",
   "dependencies": {
-    "readline-sync": "^1.4.9",
-    "hexlet-pairs": "*"
+    "commander": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -35,6 +34,8 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "*",
+    "eslint-plugin-jest": "*",
+    "eslint-plugin-babel": "*",
     "eslint-config-airbnb-base": "*",
     "eslint-plugin-import": "*",
     "babel-eslint": "*"
