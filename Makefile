@@ -9,7 +9,7 @@ build:
 	npm run build
 
 test:
-	npm test
+	npm run test
 
 lint:
 	npm run eslint .
