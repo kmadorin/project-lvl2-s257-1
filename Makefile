@@ -17,4 +17,5 @@ lint:
 publish:
 	npm publish
 
-
+push:
+	make lint && make test && git push
