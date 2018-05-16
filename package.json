@@ -1,6 +1,6 @@
 {
   "name": "gendiff-1101",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
