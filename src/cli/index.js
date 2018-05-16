@@ -3,7 +3,7 @@ import genDiff from '..';
 
 export default () => {
   program
-    .version('0.1.1')
+    .version('0.2.0')
     .arguments('<firstConfig> <secondConfig>')
     .description('Compares two configuration files and shows a difference.')
     .option('-f, --format [type]', 'Output format')
