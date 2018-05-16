@@ -2,24 +2,22 @@ import fs from 'fs';
 import _ from 'lodash';
 
 const compareObjects = (firstObject, secondObject) => {
-  const firstObjectChanges = _.keys(firstObject).reduce((acc, key) => {
-    if (!_.has(secondObject, key)) {
-      return `${acc}  - ${key}: ${firstObject[key]}\n`;
-    }
-    if (secondObject[key] !== firstObject[key]) {
-      return `${acc}  + ${key}: ${secondObject[key]}\n  - ${key}: ${firstObject[key]}\n`;
-    }
-    return `${acc}    ${key}: ${firstObject[key]}\n`;
-  }, '');
+  const keys = _.union(_.keys(firstObject), _.keys(secondObject));
 
-  const differenceString = _.keys(secondObject).reduce((acc, key) => {
+  const differences = keys.map((key) => {
     if (!_.has(firstObject, key)) {
-      return `${acc}  + ${key}: ${secondObject[key]}\n`;
+      return `  + ${key}: ${secondObject[key]}`;
     }
-    return acc;
-  }, firstObjectChanges);
 
-  return differenceString;
+    if (!_.has(secondObject, key)) {
+      return `  - ${key}: ${firstObject[key]}`;
+    }
+
+    const changes = secondObject[key] !== firstObject[key] ? `+ ${key}: ${secondObject[key]}\n  -` : ' ';
+    return `  ${changes} ${key}: ${firstObject[key]}`;
+  });
+
+  return differences.join('\n');
 };
 
 const genDiff = (firstConfigPath, secondConfigPath) => {
@@ -27,7 +25,7 @@ const genDiff = (firstConfigPath, secondConfigPath) => {
   const secondConfig = fs.readFileSync(secondConfigPath, 'utf-8');
   const firstObject = JSON.parse(firstConfig);
   const secondObject = JSON.parse(secondConfig);
-  return `{\n${compareObjects(firstObject, secondObject)}}`;
+  return `{\n${compareObjects(firstObject, secondObject)}\n}`;
 };
 
 export default genDiff;
