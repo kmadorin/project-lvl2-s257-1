@@ -28,7 +28,8 @@
   "homepage": "https://github.com/DmitryPavlenko/project-lvl2-s257#readme",
   "dependencies": {
     "commander": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "js-yaml": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
