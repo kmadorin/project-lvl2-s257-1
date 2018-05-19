@@ -28,7 +28,7 @@ test('difference beetwen two INI files', () => {
   expect(genDiff(configPath2, configPath1)).toBe(diffReverse);
 });
 
-test('difference beetwen two other files', () => {
+test('difference beetwen two incorrect type files', () => {
   const configPath1 = fs.realpathSync('__tests__/__fixtures__/before.abc');
   const configPath2 = fs.realpathSync('__tests__/__fixtures__/after.ini');
   const errorMessage = 'unkown format: .abc';
