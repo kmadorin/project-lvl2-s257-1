@@ -41,7 +41,6 @@ test('difference beetwen two JSON files in json output format', () => {
   const configPath1 = fs.realpathSync('__tests__/__fixtures__/before.JSON');
   const configPath2 = fs.realpathSync('__tests__/__fixtures__/after.json');
   const diff = fs.readFileSync('__tests__/__fixtures__/jsonDiff', 'utf-8');
-  console.log(genDiff(configPath1, configPath2, 'json'));
   expect(genDiff(configPath1, configPath2, 'json')).toBe(diff);
 });
 
