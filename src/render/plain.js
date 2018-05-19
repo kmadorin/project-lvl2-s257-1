@@ -5,30 +5,31 @@ const renderNode = (node, prefixName) => {
     return '';
   }
 
-  const val = {
+  const plainNode = {
+    ...node,
     name: `${prefixName ? `${prefixName}.` : ''}${node.name}`,
     action: node.type,
   };
 
   if (node.type === 'nested') {
-    const res = node.children.map(child => renderNode(child, val.name));
+    const res = plainNode.children.map(child => renderNode(child, plainNode.name));
     return flatten(res);
   }
 
   if (node.type === 'added') {
-    const addDescription = isObject(node.value) ? 'complex value' : `value: '${node.value}'`;
-    val.description = ` with ${addDescription}`;
+    const addDescription = isObject(plainNode.value) ? 'complex value' : `value: '${plainNode.value}'`;
+    plainNode.description = ` with ${addDescription}`;
   }
 
   if (node.type === 'updated') {
-    const oldVal = isObject(node.oldValue) ? 'complex value' : `'${node.oldValue}'`;
-    const newVal = isObject(node.newValue) ? 'complex value' : `'${node.newValue}'`;
+    const oldVal = isObject(plainNode.oldValue) ? 'complex value' : `'${plainNode.oldValue}'`;
+    const newVal = isObject(plainNode.newValue) ? 'complex value' : `'${plainNode.newValue}'`;
 
     const updDescription = `${oldVal} to ${newVal}`;
-    val.description = `. From ${updDescription}`;
+    plainNode.description = `. From ${updDescription}`;
   }
 
-  return `Property '${val.name}' was ${val.action}${val.description || ''}`;
+  return `Property '${plainNode.name}' was ${plainNode.action}${plainNode.description || ''}`;
 };
 
 export default (ast) => {
