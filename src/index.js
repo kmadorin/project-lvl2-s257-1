@@ -36,7 +36,11 @@ const buildAst = (object1, object2) => {
         newValue: object2[name],
       }];
     }
-    return [...acc, { type: 'original', name, value: object1[name] }];
+    return [...acc, {
+      type: 'original',
+      name,
+      value: object1[name],
+    }];
   }, []);
   return ast;
 };

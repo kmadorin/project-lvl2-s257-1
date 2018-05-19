@@ -1,5 +1,17 @@
 import { flatten, isObject, compact } from 'lodash';
 
+const makeDescription = (node) => {
+  if (node.type === 'added') {
+    return isObject(node.value) ? 'complex value' : `value: '${node.value}'`;
+  }
+  if (node.type === 'updated') {
+    const oldVal = isObject(node.oldValue) ? 'complex value' : `'${node.oldValue}'`;
+    const newVal = isObject(node.newValue) ? 'complex value' : `'${node.newValue}'`;
+    return `${oldVal} to ${newVal}`;
+  }
+  return '';
+};
+
 const renderNode = (node, prefixName) => {
   if (node.type === 'original') {
     return '';
@@ -7,29 +19,24 @@ const renderNode = (node, prefixName) => {
 
   const plainNode = {
     ...node,
-    name: `${prefixName ? `${prefixName}.` : ''}${node.name}`,
+    fullName: `${prefixName ? `${prefixName}.` : ''}${node.name}`,
     action: node.type,
   };
 
   if (node.type === 'nested') {
-    const res = plainNode.children.map(child => renderNode(child, plainNode.name));
+    const res = plainNode.children.map(child => renderNode(child, plainNode.fullName));
     return flatten(res);
   }
 
   if (node.type === 'added') {
-    const addDescription = isObject(plainNode.value) ? 'complex value' : `value: '${plainNode.value}'`;
-    plainNode.description = ` with ${addDescription}`;
+    plainNode.description = ` with ${makeDescription(plainNode)}`;
   }
 
   if (node.type === 'updated') {
-    const oldVal = isObject(plainNode.oldValue) ? 'complex value' : `'${plainNode.oldValue}'`;
-    const newVal = isObject(plainNode.newValue) ? 'complex value' : `'${plainNode.newValue}'`;
-
-    const updDescription = `${oldVal} to ${newVal}`;
-    plainNode.description = `. From ${updDescription}`;
+    plainNode.description = `. From ${makeDescription(plainNode)}`;
   }
 
-  return `Property '${plainNode.name}' was ${plainNode.action}${plainNode.description || ''}`;
+  return `Property '${plainNode.fullName}' was ${plainNode.action}${plainNode.description || ''}`;
 };
 
 export default (ast) => {
