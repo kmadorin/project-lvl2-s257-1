@@ -7,8 +7,8 @@ const gendiff = () => {
     .version('0.5.1')
     .arguments('<firstConfig> <secondConfig>')
     .description('Compares two configuration files and shows a difference.')
-    .option('-f, --format [type]', 'Output format')
-    .action((firstConfig, secondConfig) => console.log(genDiff(firstConfig, secondConfig)));
+    .option('-f, --format [type]', 'output format')
+    .action((config1, config2) => console.log(genDiff(config1, config2)));
 
   program.parse(process.argv);
   return program;
