@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { extname } from 'path';
 import _ from 'lodash';
 import getParser from './parser';
-import getRender from './render';
+import renders from './renders';
 
 const buildAst = (object1, object2) => {
   const propertyNames = _.union(_.keys(object1), _.keys(object2));
@@ -41,7 +41,7 @@ const buildAst = (object1, object2) => {
   return ast;
 };
 
-const genDiff = (configPath1, configPath2, diffFormat = 'default') => {
+const genDiff = (configPath1, configPath2, renderType = 'default') => {
   const ext1 = extname(configPath1).toLowerCase();
   const ext2 = extname(configPath2).toLowerCase();
   const parseData1 = getParser(ext1);
@@ -50,7 +50,7 @@ const genDiff = (configPath1, configPath2, diffFormat = 'default') => {
   const configData2 = readFileSync(configPath2, 'utf-8');
   const object1 = parseData1(configData1);
   const object2 = parseData2(configData2);
-  const render = getRender(diffFormat);
+  const render = renders[renderType];
   return render(buildAst(object1, object2));
 };
 
