@@ -28,7 +28,7 @@ test('difference beetwen two INI files', () => {
   expect(genDiff(configPath2, configPath1)).toBe(diffReverse);
 });
 
-test('difference beetwen two JSON files in plain format', () => {
+test('difference beetwen two JSON files in plain output format', () => {
   const configPath1 = fs.realpathSync('__tests__/__fixtures__/before.JSON');
   const configPath2 = fs.realpathSync('__tests__/__fixtures__/after.json');
   const diff = fs.readFileSync('__tests__/__fixtures__/plainDiff', 'utf-8');
@@ -37,7 +37,7 @@ test('difference beetwen two JSON files in plain format', () => {
   expect(genDiff(configPath2, configPath1, 'plain')).toBe(diffReverse);
 });
 
-test('difference beetwen two JSON files in plain format', () => {
+test('difference beetwen two JSON files in json output format', () => {
   const configPath1 = fs.realpathSync('__tests__/__fixtures__/before.JSON');
   const configPath2 = fs.realpathSync('__tests__/__fixtures__/after.json');
   const diff = fs.readFileSync('__tests__/__fixtures__/jsonDiff', 'utf-8');
