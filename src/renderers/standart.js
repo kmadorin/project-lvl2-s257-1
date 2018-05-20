@@ -1,31 +1,41 @@
 import _ from 'lodash';
 
-const typeToPrefix = {
-  removed: '-',
-  added: '+',
+const stringify = (val, indent) => {
+    if (!_.isObject(val)) {
+      return val;
+    }
+    return `{\n${_.keys(val).map(key =>
+      `${' '.repeat(indent + 8)}${key}: ${val[key]}`).join('\n')}\n${' '.repeat(indent + 4)}}`;
 };
 
 const renderNode = (node, indent) => {
-  const stringify = (val) => {
-    if (_.isArray(val)) {
-      const res = val.map(child => renderNode(child, indent + 4));
-      return `{\n${_.flatten(res).join('\n')}\n${' '.repeat(indent + 4)}}`;
-    }
-    if (_.isObject(val)) {
-      return `{\n${_.keys(val).map(key =>
-        `${' '.repeat(indent + 8)}${key}: ${val[key]}`).join('\n')}\n${' '.repeat(indent + 4)}}`;
-    }
-    return val;
+  const makeStr = (propertyName, value, sign) => {
+    return `${' '.repeat(indent + 2)}${sign || ' '} ${propertyName}: ${stringify(value, indent)}`;
   };
 
-  if (node.type === 'updated') {
-    return [
-      `${' '.repeat(indent + 2)}- ${node.name}: ${stringify(node.oldValue, indent)}`,
-      `${' '.repeat(indent + 2)}+ ${node.name}: ${stringify(node.newValue, indent)}`,
-    ];
+  const stringifyNode = {
+    nested: (node, indent) => {
+      const res = node.children.map(child => renderNode(child, indent + 4));
+      return `${' '.repeat(indent + 4)}${node.name}: {\n${_.flatten(res).join('\n')}\n${' '.repeat(indent + 4)}}`;
+    },
+    original: (node, indent) => {
+      return makeStr(node.name, node.value);
+    },
+    updated: (node, indent) => {
+      const res = [makeStr(node.name, node.oldValue, '-'),
+                   makeStr(node.name, node.newValue, '+'),]
+      return `${_.flatten(res).join('\n')}`;
+    },
+
+    removed: (node, indent) => {
+      return makeStr(node.name, node.value, '-');
+    },
+    added: (node, indent) => {
+      return makeStr(node.name, node.value, '+');
+    }
   }
 
-  return `${' '.repeat(indent + 2)}${typeToPrefix[node.type] || ' '} ${node.name}: ${stringify(node.value || node.children, indent)}`;
+  return stringifyNode[node.type](node, indent);
 };
 
 export default (ast) => {
