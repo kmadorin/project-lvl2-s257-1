@@ -9,8 +9,8 @@ const parsers = {
   '.ini': iniParse,
 };
 
-export default confPath => {
-  const extension = extname(confPath).toLowerCase()
+export default (confPath) => {
+  const extension = extname(confPath).toLowerCase();
   const parser = parsers[extension];
   if (!parser) {
     throw new Error(`unkown format: ${extension}`);
